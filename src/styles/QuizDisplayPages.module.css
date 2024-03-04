@@ -1,0 +1,20 @@
+.quizForm {
+    border: solid;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e2e2e2;
+    text-align: center;
+}
+
+.quizQuestionContainer {
+    border: solid;
+    border-radius: 15px;
+
+    padding: 10px;
+    margin: 10px;
+    background-color: #edf0f6;
+}
+
+.quizListStyling {
+    text-align: left;
+}

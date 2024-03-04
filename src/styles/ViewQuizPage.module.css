@@ -1,0 +1,14 @@
+.entireQuizContainer {
+    background-color: #edf0f6;
+    padding: 10px;
+    border: solid
+}
+
+.actionButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+
+    margin-bottom: 5px;
+}

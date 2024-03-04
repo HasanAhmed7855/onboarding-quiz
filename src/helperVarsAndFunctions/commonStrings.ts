@@ -1,0 +1,1 @@
+export const unknownErrorMessage = "An error occurred, check console for more info"

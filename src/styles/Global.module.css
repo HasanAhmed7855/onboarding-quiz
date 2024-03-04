@@ -1,0 +1,36 @@
+.globalPageCenter {
+    margin: auto;
+    width: fit-content;
+}
+
+.appTitle {
+    text-decoration: underline;
+    text-align: center;
+}
+
+.pageTitle {
+    text-align: center;
+}
+
+.textAlign {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonStyling {
+    background-color: #c5cacc;
+    border: solid 2px;
+    color: black;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.groupingContainer {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    justify-content: center;
+}

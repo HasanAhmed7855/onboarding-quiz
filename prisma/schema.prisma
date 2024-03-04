@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Answer {
+  answer_id         Int      @id @default(autoincrement())
+  answer_text       String
+  is_correct_answer Int
+  question_id       Int
+  question          Question @relation(fields: [question_id], references: [question_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Question {
+  question_id   Int      @id @default(autoincrement())
+  question_text String
+  quiz_id       Int
+  answer        Answer[]
+  quiz          Quiz     @relation(fields: [quiz_id], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Quiz {
+  quiz_id           Int                 @id @unique(map: "sqlite_autoindex_Quiz_1") @default(autoincrement())
+  title             String
+  question          Question[]
+  user_to_quiz_link User_To_Quiz_Link[]
+}
+
+model User {
+  user_id           Int                 @id @unique(map: "sqlite_autoindex_User_1") @default(autoincrement())
+  username          String              @unique(map: "sqlite_autoindex_User_2")
+  password          String
+  access_level      String
+  user_to_quiz_link User_To_Quiz_Link[]
+}
+
+model User_To_Quiz_Link {
+  user_id   Int
+  quiz_id   Int
+  score     Int
+  record_id Int  @id @unique(map: "sqlite_autoindex_User_To_Quiz_Link_1") @default(autoincrement())
+  quiz      Quiz @relation(fields: [quiz_id], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction)
+  user      User @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
