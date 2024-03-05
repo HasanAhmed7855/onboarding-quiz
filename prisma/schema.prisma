@@ -25,14 +25,14 @@ model Question {
 }
 
 model Quiz {
-  quiz_id           Int                 @id @unique(map: "sqlite_autoindex_Quiz_1") @default(autoincrement())
+  quiz_id           Int                 @id @default(autoincrement())
   title             String
   question          Question[]
   user_to_quiz_link User_To_Quiz_Link[]
 }
 
 model User {
-  user_id           Int                 @id @unique(map: "sqlite_autoindex_User_1") @default(autoincrement())
+  user_id           Int                 @id @default(autoincrement())
   username          String              @unique(map: "sqlite_autoindex_User_2")
   password          String
   access_level      String
@@ -43,7 +43,7 @@ model User_To_Quiz_Link {
   user_id   Int
   quiz_id   Int
   score     Int
-  record_id Int  @id @unique(map: "sqlite_autoindex_User_To_Quiz_Link_1") @default(autoincrement())
+  record_id Int  @id @default(autoincrement())
   quiz      Quiz @relation(fields: [quiz_id], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction)
   user      User @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
