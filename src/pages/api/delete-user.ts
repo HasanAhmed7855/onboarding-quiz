@@ -15,12 +15,15 @@ export default async function handle(
     // Get back user account information by querying username in user table
     //const holder = await sql`SELECT * FROM User`
     //await sql`ALTER SEQUENCE User_id RESTART WITH 0; `;
+    const hold = await prisma.user.create({
+        data: {
+            user_id: 0,
+            username: "admin",
+            password: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+            access_level: "admin" // Can only register regular users, admins have to be added manually for security reasons
+        }
+    }) 
 
-    const hold = await prisma.user.findFirst({
-      where: {
-          username: "ahmed"
-      }
-    })
 
     return res.status(200).json({ message: {hold}})
   
