@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { sql } from '@vercel/postgres'
 
 const prisma = new PrismaClient()
 
@@ -12,9 +13,10 @@ export default async function handle(
 
   try {
     // Get back user account information by querying username in user table
+    await sql`ALTER SEQUENCE user_id RESTART WITH 0; `;
     await prisma.user.delete({
       where: {
-          username: "hasan"
+          username: "ahmed"
       }
     })
 
