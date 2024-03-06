@@ -17,10 +17,10 @@ export default async function handle(
     //await sql`ALTER SEQUENCE User_id RESTART WITH 0; `;
     const hold = await prisma.user.create({
         data: {
-            user_id: 0,
-            username: "admin",
-            password: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-            access_level: "admin" // Can only register regular users, admins have to be added manually for security reasons
+            user_id: 1,
+            username: "hasan",
+            password: "82a5c663481036616824c0510f21ede50f734e63d14e5f657716ac38f3c0f9f6",
+            access_level: "regular" // Can only register regular users, admins have to be added manually for security reasons
         }
     }) 
 
