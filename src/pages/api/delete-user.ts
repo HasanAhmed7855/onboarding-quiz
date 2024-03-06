@@ -13,7 +13,7 @@ export default async function handle(
 
   try {
     // Get back user account information by querying username in user table
-    await sql`ALTER SEQUENCE user_id RESTART WITH 0; `;
+    await sql`ALTER SEQUENCE User_id RESTART WITH 0; `;
     await prisma.user.delete({
       where: {
           username: "ahmed"
