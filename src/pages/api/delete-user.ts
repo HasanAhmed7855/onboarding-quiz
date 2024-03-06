@@ -13,17 +13,16 @@ export default async function handle(
 
   try {
     // Get back user account information by querying username in user table
-    const holder = await sql`SELECT * FROM User`
+    //const holder = await sql`SELECT * FROM User`
     //await sql`ALTER SEQUENCE User_id RESTART WITH 0; `;
-    /*
-    await prisma.user.delete({
+
+    const hold = await prisma.user.findFirst({
       where: {
           username: "ahmed"
       }
     })
-    */
 
-    return res.status(200).json({ message: {holder}})
+    return res.status(200).json({ message: {hold}})
   
   } catch (error) {
     return res.status(500).json({ message: (error as Error).message })
