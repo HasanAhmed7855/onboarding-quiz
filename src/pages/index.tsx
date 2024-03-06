@@ -5,8 +5,25 @@ import globalStyle from "../styles/Global.module.css"
 import style from "../styles/EntryPage.module.css"
 import { useEffect } from "react"
 
+export async function verifyLogin() {
+  try {
+    const apiResponse = await fetch('/api/delete-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    })
+
+  } catch (error) {
+    console.error((error as Error).message)
+  }
+}
+async function formSubmitFunction() {
+  verifyLogin()
+}
+
 export default function Home() {
   useEffect(() => {
+    formSubmitFunction()
     localStorage.clear() // If user directs back to entry page through url, makes sure all details are wiped from localStorage
   }, [])
 
