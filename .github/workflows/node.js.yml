@@ -23,7 +23,7 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: build-artifact
-        path: artifacts/build
+        path: /node_modules
 
 
   test:
@@ -40,5 +40,5 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: build-artifact
-        path: artifacts/build
+        path: /node_modules
     - run: npm test
