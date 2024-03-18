@@ -5,6 +5,7 @@ describe('The Home Page', () => {
       cy.contains('h1', 'Onboarding Quiz Manager')
       cy.contains('a', 'Register')
       cy.contains('a', 'Login')
+      cy.contains('a', 'jasdsdj')
     })
   })
   
