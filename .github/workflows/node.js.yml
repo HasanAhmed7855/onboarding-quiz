@@ -19,7 +19,7 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
 
-  cypress-run:
+  cypress-e2e-test-run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
