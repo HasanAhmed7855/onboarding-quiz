@@ -17,11 +17,13 @@ export default NextAuth({
             }
         }),
     ],
+    /*
     callbacks: {
         session({ session, user }) {
             session.user!.role = user.role
             return session
         }
     },
+    */
     secret: process.env.NEXTAUTH_SECRET
 })
