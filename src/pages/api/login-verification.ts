@@ -12,23 +12,8 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
-
-    await prisma.account.delete({
-      where: {
-        id: "clu1mn3zr0002o1geu86uoep5"
-      }
-    })
-
-    await prisma.user.delete({
-      where: {
-        email: "hasanahmed7855@hotmail.com"
-      }
-    })
-
-
     return res.status(200).json({ message: 'Quiz successfully deleted' })
 
-  
     /*
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
