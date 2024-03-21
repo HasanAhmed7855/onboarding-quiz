@@ -66,5 +66,4 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  access_level      String?
 }
