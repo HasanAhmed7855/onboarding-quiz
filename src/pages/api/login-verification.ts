@@ -12,8 +12,27 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
-    return res.status(200).json({ message: 'Quiz successfully deleted' })
 
+    const deletedQuiz = await prisma.$transaction(async (prisma) => { // transaction ensures the deletes are executes together, not seperately
+
+      await prisma.account.delete({
+        where: {
+          id: "clu1njzo00002bj14z9aoc49v"
+        }
+      })
+
+      return prisma.user.delete({
+        where: {
+          email: "hasanahmed7855@hotmail.com"
+        }
+      })
+  })
+
+  if (deletedQuiz) {
+      return res.status(200).json({ message: 'Quiz successfully deleted' })
+  }
+  return res.status(200).json({ message: 'Quiz successfully' })
+  
     /*
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
