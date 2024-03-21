@@ -29,22 +29,42 @@ model Quiz {
   quiz_id           Int                 @id @default(autoincrement())
   title             String
   question          Question[]
-  user_to_quiz_link User_To_Quiz_Link[]
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  user_id           Int                 @id @default(autoincrement())
-  username          String              @unique(map: "sqlite_autoindex_User_2")
-  password          String
-  access_level      String
-  user_to_quiz_link User_To_Quiz_Link[]
-}
-
-model User_To_Quiz_Link {
-  user_id   Int
-  quiz_id   Int
-  score     Int
-  record_id Int  @id @default(autoincrement())
-  quiz      Quiz @relation(fields: [quiz_id], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction)
-  user      User @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  access_level      String?
 }

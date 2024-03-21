@@ -12,43 +12,6 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
-
-    const deletelinkAndUser = await prisma.$transaction(async (prisma) => { // transaction ensures the deletes are executes together, not seperately
-            
-      // Order of deletion: answers -> questions -> quiz
-      // Prisma docs (no date)
-      await prisma.user_To_Quiz_Link.deleteMany({
-          where: {
-              user_id : 1
-          }
-      })
-
-      await prisma.user.delete({
-        where: {
-            username: "hasan"
-        }
-      })
-  
-      await prisma.user.delete({
-        where: {
-            username: "ahmed"
-        }
-      })
-  
-      return prisma.user.delete({
-        where: {
-            username: "admin"
-        }
-      })
-  })
-
-  if (deletelinkAndUser) {
-    return res.status(200).json({ message: 'Quiz successfully deleted' })
-}
-
-  
-
-/*
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
     }
@@ -77,7 +40,7 @@ export default async function handle(
     }
     else {
       return res.status(401).json({ message: 'Authentication failed, incorrect username or password. Please try again' })
-    } */
+    }
   
   } catch (error) {
     return res.status(500).json({ message: (error as Error).message })

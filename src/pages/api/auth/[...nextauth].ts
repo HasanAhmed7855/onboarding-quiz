@@ -1,7 +1,13 @@
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaClient } from "@prisma/client"
+import { Adapter } from "next-auth/adapters"
+
+const prisma = new PrismaClient()
 
 export default NextAuth({
+    adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GithubProvider({
         clientId: process.env.GITHUB_ID ? process.env.GITHUB_ID : "",
