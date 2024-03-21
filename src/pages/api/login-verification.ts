@@ -12,30 +12,47 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
-    const deleteAccount = await prisma.user.delete({
-      where: {
-          username: "hasan"
-      }
-    })
 
-    const deleteAccounttwo = await prisma.user.delete({
-      where: {
-          username: "ahmed"
-      }
-    })
+    const deletelinkAndUser = await prisma.$transaction(async (prisma) => { // transaction ensures the deletes are executes together, not seperately
+            
+      // Order of deletion: answers -> questions -> quiz
+      // Prisma docs (no date)
+      await prisma.user_To_Quiz_Link.deleteMany({
+          where: {
+              user_id : 1
+          }
+      })
 
-    const deleteAccountthree = await prisma.user.delete({
-      where: {
-          username: "admin"
-      }
-    })
+      await prisma.user.delete({
+        where: {
+            username: "hasan"
+        }
+      })
+  
+      await prisma.user.delete({
+        where: {
+            username: "ahmed"
+        }
+      })
+  
+      return prisma.user.delete({
+        where: {
+            username: "admin"
+        }
+      })
+  })
 
-    return res.status(200).json({ message: 'Authentication success, add deleteed' })
+  if (deletelinkAndUser) {
+    return res.status(200).json({ message: 'Quiz successfully deleted' })
+}
 
+  
+
+/*
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
     }
-/* 
+ 
     // Get back user account information by querying username in user table
     const accountInfo = await prisma.user.findUnique({
       where: {
