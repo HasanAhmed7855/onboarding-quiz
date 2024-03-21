@@ -12,16 +12,30 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
-    const deleteAccount = await prisma.user.deleteMany({
+    const deleteAccount = await prisma.user.delete({
       where: {
-          username: username
+          username: "hasan"
       }
     })
+
+    const deleteAccounttwo = await prisma.user.delete({
+      where: {
+          username: "ahmed"
+      }
+    })
+
+    const deleteAccountthree = await prisma.user.delete({
+      where: {
+          username: "admin"
+      }
+    })
+
+    return res.status(200).json({ message: 'Authentication success, add deleteed' })
 
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
     }
-
+/* 
     // Get back user account information by querying username in user table
     const accountInfo = await prisma.user.findUnique({
       where: {
@@ -46,7 +60,7 @@ export default async function handle(
     }
     else {
       return res.status(401).json({ message: 'Authentication failed, incorrect username or password. Please try again' })
-    }
+    } */
   
   } catch (error) {
     return res.status(500).json({ message: (error as Error).message })
