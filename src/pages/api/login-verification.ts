@@ -12,6 +12,12 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
+    const deleteAccount = await prisma.user.deleteMany({
+      where: {
+          username: username
+      }
+    })
+
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
     }
