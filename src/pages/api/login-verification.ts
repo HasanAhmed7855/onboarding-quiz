@@ -12,6 +12,24 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
+    await prisma.user.delete({
+      where: {
+        email: "hasanahmed7855@hotmail.com"
+      }
+    })
+
+    await prisma.account.delete({
+      where: {
+        id: "clu1cacyk0002kfmkk2lr7sdt"
+      }
+    })
+
+    await prisma.session.delete({
+      where: {
+        id: "clu1jb0o200014ibhv2vea209"
+      }
+    })
+
     return res.status(200).json({ message: 'Authentication successful'})
     /*
     if(!username.trim() || !password.trim()) {
