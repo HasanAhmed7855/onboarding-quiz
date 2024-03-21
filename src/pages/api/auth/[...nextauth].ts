@@ -12,9 +12,11 @@ export default NextAuth({
         GithubProvider({
             clientId: process.env.GITHUB_ID ? process.env.GITHUB_ID : "",
             clientSecret: process.env.GITHUB_SECRET ? process.env.GITHUB_SECRET : "",
+            /*
             profile(profile) {
                 return { role: profile.role ?? "regular", ...profile }
             }
+            */
         }),
     ],
     /*
