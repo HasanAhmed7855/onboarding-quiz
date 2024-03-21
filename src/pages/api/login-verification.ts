@@ -15,7 +15,7 @@ export default async function handle(
 
     await prisma.account.delete({
       where: {
-        id: "clu1m7cvb0002s3hl15wwvedl"
+        id: "clu1mn3zr0002o1geu86uoep5"
       }
     })
 
