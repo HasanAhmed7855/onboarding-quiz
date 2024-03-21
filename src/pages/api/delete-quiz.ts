@@ -17,12 +17,6 @@ export default async function handle(
             
             // Order of deletion: answers -> questions -> quiz
             // Prisma docs (no date)
-            await prisma.user_To_Quiz_Link.deleteMany({
-                where: {
-                    quiz_id : quizidCasted
-                }
-            })
-
             await prisma.answer.deleteMany({
                 where: {
                     question: {

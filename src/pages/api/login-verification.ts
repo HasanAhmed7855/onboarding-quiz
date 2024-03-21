@@ -12,6 +12,7 @@ export default async function handle(
   const { username, password } = req.body
 
   try {
+    /*
     if(!username.trim() || !password.trim()) {
       return res.status(400).json({ message: "Please do not leave the username or password empty. Inputs with just whitespace isn't allowed" })
     }
@@ -41,6 +42,7 @@ export default async function handle(
     else {
       return res.status(401).json({ message: 'Authentication failed, incorrect username or password. Please try again' })
     }
+    */
   
   } catch (error) {
     return res.status(500).json({ message: (error as Error).message })

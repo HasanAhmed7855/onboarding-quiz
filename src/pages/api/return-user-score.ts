@@ -59,19 +59,8 @@ export default async function handle(
                 }
             })
 
-            // Write user score to database
-            const writeUserResult = await prisma.user_To_Quiz_Link.create({
-                data: {
-                    user_id: Number(userId),
-                    quiz_id: quizidCasted,
-                    score: totalScore, 
-                }
-            })
-
-            if (writeUserResult) {
-                const amountOfQuestionsInQuiz = quizQuestionsWithCorrectAnswersMap.length
-                res.status(200).json({ message: `You got ${totalScore} out of ${amountOfQuestionsInQuiz}. Directing you back to mainmenu...` })
-            }
+            const amountOfQuestionsInQuiz = quizQuestionsWithCorrectAnswersMap.length
+            res.status(200).json({ message: `You got ${totalScore} out of ${amountOfQuestionsInQuiz}. Directing you back to mainmenu...` })
         }
 
     } catch (error) {
