@@ -5,10 +5,14 @@ import { useEffect, useState } from "react"
 import globalStyle from "../../styles/Global.module.css"
 import style from "../../styles/Mainmenu.module.css"
 import { useSession, signIn, signOut } from "next-auth/react"
+//import { getServerSession } from "next-auth"
+//import { authOptions } from "../api/auth/[...nextauth]"
+
 
 export default function MainMenuComponent() {
   const { data: session, status } = useSession()
-  //const usersName = session?.user?.name
+  const usersName = session?.user?.name
+  const userRole = session?.user?.role
 
   if (status === "loading") {
     return <p>Hang on there...</p>
@@ -17,7 +21,8 @@ export default function MainMenuComponent() {
   if (status === "authenticated") {
     return (
       <>
-        {/*<p>Signed in as {usersName}</p>*/}
+        <p>Signed in as {usersName}</p>
+        <p>YOU ARE A {userRole} ROLE</p>
         <button onClick={() => signOut()}>Sign out</button>
         <img src="https://cdn.pixabay.com/photo/2017/08/11/19/36/vw-2632486_1280.png" />
       </>
