@@ -5,27 +5,33 @@ import { useEffect, useState } from "react"
 import globalStyle from "../../styles/Global.module.css"
 import style from "../../styles/Mainmenu.module.css"
 import { useSession, signIn, signOut } from "next-auth/react"
-//import { getServerSession } from "next-auth"
-//import { authOptions } from "../api/auth/[...nextauth]"
-
 
 export default function MainMenuComponent() {
   const { data: session, status } = useSession()
-  const usersName = session?.user?.name
-  const userRole = session?.user?.role
 
   if (status === "loading") {
-    return <p>Hang on there...</p>
+    return <p>Gathering information...</p>
   }
 
   if (status === "authenticated") {
     return (
-      <>
-        <p>Signed in as {usersName}</p>
-        <p>YOU ARE A {userRole} ROLE</p>
-        <button onClick={() => signOut()}>Sign out</button>
-        <img src="https://cdn.pixabay.com/photo/2017/08/11/19/36/vw-2632486_1280.png" />
-      </>
+      <div data-testid="MainMenuComponent">
+        <h2 className={globalStyle.pageTitle}> Main Menu </h2>
+        <div className={style.mainmenuContainer}>
+          {session.user.role === "ADMIN" ? 
+            <>
+              <Link className={globalStyle.buttonStyling} href={buildQuizPage}> Create new quiz </Link>
+              <Link className={globalStyle.buttonStyling} href={viewExistingQuizzesPage}> View existing quizzes </Link>
+            </>
+            :
+            <>
+              <Link className={globalStyle.buttonStyling} href={viewExistingQuizzesPage}> View available quizzes </Link>
+              {/* NICE TO HAVE: See previously taken quiz scores page */}
+            </>
+          }
+          <LogoutButtonComponent/>
+        </div>
+      </div>
     )
   }
 
@@ -36,30 +42,5 @@ export default function MainMenuComponent() {
     </>
   )
 
-  const [isAdmin, setIsAdmin] = useState<boolean>(false) 
-
-  useEffect(() => {
-    setIsAdmin(localStorage.getItem("is_admin") === "true" ? true : false)
-  }, [])
-
-  return (
-    <div data-testid="MainMenuComponent">
-      <h2 className={globalStyle.pageTitle}> Main Menu </h2>
-      <div className={style.mainmenuContainer}>
-        {isAdmin ? 
-          <>
-            <Link className={globalStyle.buttonStyling} href={buildQuizPage}> Create new quiz </Link>
-            <Link className={globalStyle.buttonStyling} href={viewExistingQuizzesPage}> View existing quizzes </Link>
-          </>
-          :
-          <>
-            <Link className={globalStyle.buttonStyling} href={viewExistingQuizzesPage}> View available quizzes </Link>
-            {/* NICE TO HAVE: See previously taken quiz scores page */}
-          </>
-        }
-        <LogoutButtonComponent/>
-      </div>
-    </div>
-  )
 }
   
