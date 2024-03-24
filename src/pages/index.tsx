@@ -1,4 +1,4 @@
-import { loginPage, registrationPage } from "@/helperVarsAndFunctions/pageUrls"
+import { mainMenuPage } from "@/helperVarsAndFunctions/pageUrls"
 import Head from "next/head"
 import Link from "next/link"
 import globalStyle from "../styles/Global.module.css"
@@ -19,8 +19,7 @@ export default function Home() {
       </Head>
       <main>
         <div className={style.entryPageButtonContainer} data-testid="EntryComponent">
-          <Link className={globalStyle.buttonStyling} href={registrationPage}>Register</Link>
-          <Link className={globalStyle.buttonStyling} href={loginPage}>Login</Link>
+          <Link className={globalStyle.buttonStyling} href={mainMenuPage}>Login using GitHub</Link>
         </div>
       </main>
     </>
