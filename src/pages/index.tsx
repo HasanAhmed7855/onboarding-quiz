@@ -3,12 +3,9 @@ import Head from "next/head"
 import Link from "next/link"
 import globalStyle from "../styles/Global.module.css"
 import style from "../styles/EntryPage.module.css"
-import { useEffect } from "react"
+import { signIn } from "next-auth/react"
 
 export default function Home() {
-  useEffect(() => {
-    localStorage.clear() // If user directs back to entry page through url, makes sure all details are wiped from localStorage
-  }, [])
 
   return (
     <>
@@ -19,7 +16,7 @@ export default function Home() {
       </Head>
       <main>
         <div className={style.entryPageButtonContainer} data-testid="EntryComponent">
-          <Link className={globalStyle.buttonStyling} href={mainMenuPage}>Login using GitHub</Link>
+          <button className={globalStyle.buttonStyling} onClick={() => signIn(undefined, { callbackUrl: mainMenuPage })}>Login using GitHub</button>
         </div>
       </main>
     </>
