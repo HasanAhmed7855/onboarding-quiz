@@ -1,6 +1,7 @@
 import { entryPage, mainMenuPage } from "@/helperVarsAndFunctions/pageUrls"
 import {useRouter} from "next/navigation"
 import globalStyle from "@/styles/Global.module.css"
+import { signOut } from "next-auth/react"
 
 export const CancelButtonComponent = () => {
     const router = useRouter()
@@ -17,18 +18,9 @@ export const CancelButtonComponent = () => {
 }
 
 export const LogoutButtonComponent = () => {
-    const router = useRouter()
-
-    function navigateToEntryPageAndClearLocalStorage() {
-        localStorage.clear()
-
-        router.push(entryPage)
-    }
-
     return (
-        <button className={globalStyle.buttonStyling} type="button" onClick={navigateToEntryPageAndClearLocalStorage}>
-            Logout
-        </button>
+        <button className={globalStyle.buttonStyling} onClick={() => signOut({ callbackUrl: entryPage })}>Logout</button>
+
     )
 }
 
