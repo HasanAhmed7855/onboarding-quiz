@@ -1,10 +1,9 @@
 import { LogoutButtonComponent } from "@/components/common/redirection"
 import { buildQuizPage, viewExistingQuizzesPage } from "@/helperVarsAndFunctions/pageUrls"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 import globalStyle from "../../styles/Global.module.css"
 import style from "../../styles/Mainmenu.module.css"
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn } from "next-auth/react"
 
 export default function MainMenuComponent() {
   const { data: session, status } = useSession()

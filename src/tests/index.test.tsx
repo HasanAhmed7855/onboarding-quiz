@@ -12,8 +12,8 @@ describe("Entry Page", () => {
     it("renders the Login and Register links", () => {
         render(<Home />)
 
-        const loginLink = screen.getByText("Login using GitHub")
+        const loginLink = screen.getByTestId('GitHubLoginButton')
 
-        expect(loginLink).toBeInTheDocument()
+        expect(loginLink.textContent).toBe('Login using GitHub')
     })
 })

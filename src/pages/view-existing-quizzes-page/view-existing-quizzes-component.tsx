@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import globalStyle from "../../styles/Global.module.css"
 import style from "../../styles/ExistingQuiz.module.css"
+import { signIn, useSession } from "next-auth/react"
 
 type ReponseData = {
     message: string
@@ -38,58 +39,70 @@ export async function fetchExistingQuizData() {
 }
 
 export default function ViewExistingQuizzesComponent() {
+    const { data: session, status } = useSession()
+
     const [quizData, setQuizData] = useState<Quiz[]>()
     const [isLoading, setIsLoading] = useState(true)
 
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
-
     const router = useRouter()
 
-    useEffect(() => {
-        async function getApiData() {
-            const result = await fetchExistingQuizData()
-            if (result) {
-                setQuizData(result)
-                setIsAdmin(localStorage.getItem("is_admin") === "true" ? true : false)
-            }
-            setIsLoading(false)
-        }
+    if (status === "loading") {
+        return <p>Gathering information...</p>
+    }
 
-        getApiData()
-    }, [])
+    if (status === "authenticated") {
+        useEffect(() => {
+            async function getApiData() {
+                const result = await fetchExistingQuizData()
+                if (result) {
+                    setQuizData(result)
+                }
+                setIsLoading(false)
+            }
+    
+            getApiData()
+        }, [])
+
+        return (
+            <div>
+                <h2 className={globalStyle.pageTitle}> Existing Quizzes </h2>
+                {/* Depending on the isLoading and quizData state, show 1 of 3 potenial views */}
+                {isLoading &&
+                    <p>Loading...</p>
+                }
+                {!isLoading && !quizData &&
+                    <p data-testid="ViewExistingQuizzesFailMessage">Something went wrong with fetching the quizzes. Please direct back to the previous page and try again</p>
+                }
+                {!isLoading && quizData &&
+                    <>
+                        {quizData.map((quiz, index) => {
+                            return (
+                                <div className={style.questionContainer} data-testid="ViewExistingQuizzesComponent">
+                                    <h2 className={globalStyle.pageTitle}>{quiz.title}</h2>
+                                    {session.user.role === "ADMIN" ?
+                                    <div className={style.actionLinkContainer}>
+                                        <Link className={globalStyle.buttonStyling} href={`${viewQuizPage}?quizid=${quiz.quiz_id}`}>View Quiz</Link>
+                                        <button className={globalStyle.buttonStyling} style={{"backgroundColor": "red"}} type="button" onClick={() => deleteQuiz(quiz.quiz_id, router)}>Delete Quiz</button>
+                                    </div>
+                                    :
+                                    <div className={style.actionLinkContainer}>
+                                        <Link className={globalStyle.buttonStyling} href={`${takeQuizPage}?quizid=${quiz.quiz_id}`}>Take Quiz</Link>
+                                    </div>
+                                    }
+                                </div>
+                            )
+                        })}
+                    </>
+                }
+                <BackButtonComponent/>
+          </div>
+        )
+    }
 
     return (
-        <div>
-            <h2 className={globalStyle.pageTitle}> Existing Quizzes </h2>
-            {/* Depending on the isLoading and quizData state, show 1 of 3 potenial views */}
-            {isLoading &&
-                <p>Loading...</p>
-            }
-            {!isLoading && !quizData &&
-                <p data-testid="ViewExistingQuizzesFailMessage">Something went wrong with fetching the quizzes. Please direct back to the previous page and try again</p>
-            }
-            {!isLoading && quizData &&
-                <>
-                    {quizData.map((quiz, index) => {
-                        return (
-                            <div className={style.questionContainer} data-testid="ViewExistingQuizzesComponent">
-                                <h2 className={globalStyle.pageTitle}>{quiz.title}</h2>
-                                {isAdmin ?
-                                <div className={style.actionLinkContainer}>
-                                    <Link className={globalStyle.buttonStyling} href={`${viewQuizPage}?quizid=${quiz.quiz_id}`}>View Quiz</Link>
-                                    <button className={globalStyle.buttonStyling} style={{"backgroundColor": "red"}} type="button" onClick={() => deleteQuiz(quiz.quiz_id, router)}>Delete Quiz</button>
-                                </div>
-                                :
-                                <div className={style.actionLinkContainer}>
-                                    <Link className={globalStyle.buttonStyling} href={`${takeQuizPage}?quizid=${quiz.quiz_id}`}>Take Quiz</Link>
-                                </div>
-                                }
-                            </div>
-                        )
-                    })}
-                </>
-            }
-            <BackButtonComponent/>
-      </div>
-    )
+        <>
+          <p>Not signed in.</p>
+          <button onClick={() => signIn("github")}>Sign in</button>
+        </>
+      )
 }

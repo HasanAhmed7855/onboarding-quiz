@@ -16,7 +16,12 @@ export default function Home() {
       </Head>
       <main>
         <div className={style.entryPageButtonContainer} data-testid="EntryComponent">
-          <button className={globalStyle.buttonStyling} onClick={() => signIn(undefined, { callbackUrl: mainMenuPage })}>Login using GitHub</button>
+          <button className={globalStyle.buttonStyling}
+          onClick={() => signIn(undefined, { callbackUrl: mainMenuPage })}
+          data-testid="GitHubLoginButton">
+            Login using GitHub
+          </button>
+          <i>If you don't have a GitHub account, you can signup for one via the <b>Login using GitHub</b> button above.</i>
         </div>
       </main>
     </>
