@@ -3,11 +3,24 @@ import "@testing-library/jest-dom"
 import userEvent from '@testing-library/user-event'
 import fetchMock from 'jest-fetch-mock'
 import {render, screen } from "@testing-library/react"
+import { Session } from "next-auth"
 
 // Mocking useRouter otherwise errors appear in consolve related to it
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn()
 }))
+
+jest.mock("next-auth/react", () => {
+    const mockSession: Session = {
+      expires: new Date(Date.now() + 2 * 86400).toISOString(),
+      user: { id: "mockId", name: "mockName", email: "mockEmail", image: "mockImage", role: "ADMIN" }
+    };
+    return {
+      useSession: jest.fn(() => {
+        return {data: mockSession, status: 'authenticated'}
+      }),
+    };
+});
 
 const mockQuizData = {"quiz_id":1,
 "title":"Test Quiz",

@@ -83,6 +83,7 @@ export default function ViewQuizComponent() {
         )
     }
 
+    // NEED IF STATEMENT IF THEY TRY TO ACCESS THIS PAGE WITHOUT PROPER USER ROLE
     return (
         <>
           <p>Not signed in.</p>

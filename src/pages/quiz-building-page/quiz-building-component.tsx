@@ -7,6 +7,7 @@ import { Question, Answer, MessageResponseData } from "../../types/types"
 import globalStyle from "../../styles/Global.module.css"
 import style from "../../styles/QuizDisplayPages.module.css"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
+import { signIn, useSession } from "next-auth/react"
 
 const Title = (props: {
     title: string
@@ -144,6 +145,8 @@ async function callApiToUpdateQuiz(
 }
 
 const QuizBuildingComponent = () => {
+    const { data: session, status } = useSession()
+
     const [quizId, setQuizId] = useState<number>()
     const [title, setTitle] = useState<string>('')
     const [questions, setQuestions] = useState<Question[]>([])
@@ -154,18 +157,9 @@ const QuizBuildingComponent = () => {
     const [questionId, setQuestionId] = useState<number>(0)
     const [answerId, setAnswerId] = useState<number>(0)
 
-    useEffect(() => {
-        // get quizData from localStorage then set state to popular the quiz form inputs
-        const quizDatalocalStorage = localStorage.getItem("quizData")
-        if (quizDatalocalStorage) {
-            const quizData = JSON.parse(quizDatalocalStorage)
-            setTitle(quizData.title)
-            setQuestions(quizData.question)
-            setQuizId(quizData.quiz_id)
-            
-            localStorage.removeItem("quizData")
-        }
-    }, [])
+    if (status === "loading") {
+        return <p>Gathering information...</p>
+    }
 
     function validateFormInputs() {
         const errorMessages: string[] = []
@@ -315,47 +309,70 @@ const QuizBuildingComponent = () => {
         setQuestions(updatedQuestions)
     }
 
-    return (
-    <div>
-        <h2 className={globalStyle.pageTitle}> {quizId ? "Edit quiz page" : "Create A New Quiz"}</h2>
-        <form className={style.quizForm} onSubmit={(e) => handleSubmit(e, setErrorMessages)}>
-            <Title title={title} setTitle={setTitle}/>
+    if (status === "authenticated" && session.user.role === "ADMIN") {
+        useEffect(() => {
+            // get quizData from localStorage then set state to popular the quiz form inputs
+            const quizDatalocalStorage = localStorage.getItem("quizData")
+            if (quizDatalocalStorage) {
+                const quizData = JSON.parse(quizDatalocalStorage)
+                setTitle(quizData.title)
+                setQuestions(quizData.question)
+                setQuizId(quizData.quiz_id)
+                
+                localStorage.removeItem("quizData")
+            }
+        }, [])
+    
+        return (
+        <div>
+            <h2 className={globalStyle.pageTitle}> {quizId ? "Edit quiz page" : "Create A New Quiz"}</h2>
+            <form className={style.quizForm} onSubmit={(e) => handleSubmit(e, setErrorMessages)}>
+                <Title title={title} setTitle={setTitle}/>
+    
+                {questions.map((question, index) => (
+                    <Question
+                        key={index}
+                        question={question}
+                        index={index}
+                        handleQuestionChange={handleQuestionChange}
+                        addAnswer={addAnswer}
+                        removeQuestion={removeQuestion}
+                        handleAnswerChange={handleAnswerChange}
+                        handleCorrectAnswerChange={handleCorrectAnswerChange}
+                        removeAnswer={removeAnswer}
+                    />
+                ))}
+                <button type="button" onClick={addQuestion}>+ Add Question</button>
+                
+                <div className={globalStyle.groupingContainer}>
+                    <CancelButtonComponent/>
+                    <button className={globalStyle.buttonStyling} style={{"backgroundColor": "#0ce943"}} type="submit">Publish</button>
+                </div>
+                
+                {errorMessages?.length > 0 &&
+                <div style={{color: "red", alignSelf: "center"}}>
+                    <p>Please address these issue before publishing a quiz:</p>
+                    <ul className={style.quizListStyling}>
+                        {errorMessages instanceof Array ?
+                            errorMessages.map((errorMessage, index) => (
+                                <li key={index}>{errorMessage}</li>
+                            ))
+                            :
+                            <li>{errorMessages}</li>
+                        }
+                    </ul>
+                </div>}
+            </form>
+        </div>
+        )
+    }
 
-            {questions.map((question, index) => (
-                <Question
-                    key={index}
-                    question={question}
-                    index={index}
-                    handleQuestionChange={handleQuestionChange}
-                    addAnswer={addAnswer}
-                    removeQuestion={removeQuestion}
-                    handleAnswerChange={handleAnswerChange}
-                    handleCorrectAnswerChange={handleCorrectAnswerChange}
-                    removeAnswer={removeAnswer}
-                />
-            ))}
-            <button type="button" onClick={addQuestion}>+ Add Question</button>
-            
-            <div className={globalStyle.groupingContainer}>
-                <CancelButtonComponent/>
-                <button className={globalStyle.buttonStyling} style={{"backgroundColor": "#0ce943"}} type="submit">Publish</button>
-            </div>
-            
-            {errorMessages?.length > 0 &&
-            <div style={{color: "red", alignSelf: "center"}}>
-                <p>Please address these issue before publishing a quiz:</p>
-                <ul className={style.quizListStyling}>
-                    {errorMessages instanceof Array ?
-                        errorMessages.map((errorMessage, index) => (
-                            <li key={index}>{errorMessage}</li>
-                        ))
-                        :
-                        <li>{errorMessages}</li>
-                    }
-                </ul>
-            </div>}
-        </form>
-    </div>
+    // NEED IF STATEMENT IF THEY TRY TO ACCESS THIS PAGE WITHOUT PROPER USER ROLE
+    return (
+        <>
+          <p>Not signed in.</p>
+          <button onClick={() => signIn("github")}>Sign in</button>
+        </>
     )
 }
 
