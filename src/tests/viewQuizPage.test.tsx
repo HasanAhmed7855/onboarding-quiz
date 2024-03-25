@@ -4,6 +4,7 @@ import "@testing-library/jest-dom"
 import {act, render, screen } from "@testing-library/react"
 import fetchMock from 'jest-fetch-mock'
 import React from "react"
+import { Session } from "next-auth"
 
 const mockQuizDetailsApiData = {
     "message": "Quiz details retrieved successfully Mock",
@@ -62,6 +63,18 @@ jest.mock('next/navigation', () => ({
         get: () => "1"
     }))
 }))
+
+jest.mock("next-auth/react", () => {
+    const mockSession: Session = {
+      expires: new Date(Date.now() + 2 * 86400).toISOString(),
+      user: { id: "mockId", name: "mockName", email: "mockEmail", image: "mockImage", role: "ADMIN" }
+    };
+    return {
+      useSession: jest.fn(() => {
+        return {data: mockSession, status: 'authenticated'}
+      }),
+    };
+});
 
 describe("View Quizzes Page", () => {
     afterEach(() => {

@@ -104,5 +104,5 @@ export default function ViewExistingQuizzesComponent() {
           <p>Not signed in.</p>
           <button onClick={() => signIn("github")}>Sign in</button>
         </>
-      )
+    )
 }
