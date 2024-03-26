@@ -50,14 +50,6 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 enum UserRole {
   ADMIN
   REGULAR
@@ -71,5 +63,4 @@ model User {
   image         String?
   role          UserRole  @default(REGULAR)
   accounts      Account[]
-  sessions      Session[]
 }
