@@ -1,29 +1,35 @@
-name: Node.js CI
+name: CI Pipeline
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build:
+  # building artifacts and running unit tests
+  build-and-unit-tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+
     - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
         node-version: '18'
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    
+    - run: npm ci # Provides faster and consistent builds in automated environments
+    - run: npm run build --if-present # building artifacts
+    - run: npm test # Running unit tests
+    - run: npm audit --production --audit-level=moderate # Running security audit on dependencies
 
+  # End to end testing stage
   cypress-e2e-test-run:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
@@ -35,11 +41,15 @@ jobs:
     needs: cypress-e2e-test-run
     steps:
       - uses: actions/checkout@v2
+
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
+
       - name: Pull Vercel environment info
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Build artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        
       - name: Deploy artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
