@@ -6,8 +6,8 @@ describe('The Home Page', () => {
       cy.get('.button').click()
       cy.get('.button').click()
 
-      cy.get('input#login_field').type(Cypress.env("GITHUB_USER"));
-      cy.get('input#password').type(Cypress.env("GITHUB_PASSWORD"));
+      cy.get('input#login_field').type(Cypress.env("GH_USER"));
+      cy.get('input#password').type(Cypress.env("GH_PASSWORD"));
       cy.get('input[type="submit"]').click();
 
     
