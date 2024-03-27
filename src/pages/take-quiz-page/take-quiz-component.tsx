@@ -3,11 +3,11 @@ import { unknownErrorMessage } from "@/helperVarsAndFunctions/commonStrings"
 import { mainMenuPage } from "@/helperVarsAndFunctions/pageUrls"
 import { fetchQuizDetailsData } from "@/helperVarsAndFunctions/sharedFetchFunctions"
 import { MessageResponseData, QuizDetails, UserSelectedAnswers } from "@/types/types"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 import { useRouter, useSearchParams } from "next/navigation"
 import { FormEvent, useEffect, useState } from "react"
 import quizStyle from "../../styles/QuizDisplayPages.module.css"
 import style from "../../styles/TakeQuizPage.module.css"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 // Its fine that some values are undefined, backend will pick it up
 async function postUserScore(

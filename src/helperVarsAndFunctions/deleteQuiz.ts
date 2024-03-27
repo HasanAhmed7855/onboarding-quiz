@@ -1,6 +1,6 @@
 import { MessageResponseData } from "@/types/types"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 import { unknownErrorMessage } from "./commonStrings"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 export async function deleteQuiz(quiz_id: number, router: AppRouterInstance) {
 

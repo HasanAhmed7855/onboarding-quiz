@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react"
 import { Question, Answer, MessageResponseData } from "../../types/types"
 import globalStyle from "../../styles/Global.module.css"
 import style from "../../styles/QuizDisplayPages.module.css"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context"
 import { signIn, useSession } from "next-auth/react"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
 const Title = (props: {
     title: string
